@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UNLa | Actividad individual - Valor agregado en alimentos</title>
+  <style>
+    :root{
+      --granate:#7a0026;
+      --granate-oscuro:#520019;
+      --granate-claro:#a31d45;
+      --dorado:#d9a441;
+      --gris-950:#111827;
+      --gris-800:#25313f;
+      --gris-700:#3e4c59;
+      --gris-500:#7b8794;
+      --gris-250:#d7dde4;
+      --gris-200:#e4e7eb;
+      --gris-100:#f5f7fa;
+      --verde:#198754;
+      --verde-suave:#ecfdf3;
+      --rojo:#b42318;
+      --rojo-suave:#fff0ee;
+      --azul:#2457a6;
+      --amarillo-suave:#fff8e8;
+      --blanco:#ffffff;
+      --sombra:0 18px 50px rgba(31,41,51,.13);
+      --radio:22px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Verdana, Geneva, Tahoma, sans-serif;
+      background:
+        radial-gradient(circle at 8% 8%, rgba(217,164,65,.22), transparent 30%),
+        radial-gradient(circle at 92% 12%, rgba(122,0,38,.18), transparent 28%),
+        linear-gradient(135deg,#fff 0%,#f7f1f3 48%,#eef1f4 100%);
+      color:var(--gris-950);
+      min-height:100vh;
+    }
+    .topbar{
+      background:linear-gradient(90deg,var(--granate-oscuro),var(--granate));
+      color:#fff;
+      padding:14px 20px;
+      box-shadow:0 8px 22px rgba(0,0,0,.18);
+      position:sticky;
+      top:0;
+      z-index:20;
+    }
+    .topbar-inner{
+      max-width:1180px;
+      margin:auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+    .brand{display:flex;align-items:center;gap:14px;min-width:0}
+    .brand img{
+      height:48px;width:auto;background:#fff;border-radius:10px;padding:4px;object-fit:contain;
+    }
+    .brand-title{font-weight:700;letter-spacing:.2px;line-height:1.2}
+    .brand-subtitle{font-size:.78rem;opacity:.9;line-height:1.35;margin-top:2px}
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.35);
+      background:rgba(255,255,255,.12);color:#fff;border-radius:999px;padding:8px 12px;
+      font-size:.78rem;white-space:nowrap;
+    }
+    main{max-width:1180px;margin:0 auto;padding:34px 20px 70px}
+    .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:stretch;margin-top:8px}
+    .panel{background:rgba(255,255,255,.94);border:1px solid rgba(122,0,38,.12);border-radius:var(--radio);box-shadow:var(--sombra);overflow:hidden}
+    .hero-card{padding:34px;position:relative}
+    .hero-card::after{content:"";position:absolute;width:210px;height:210px;border-radius:50%;background:rgba(217,164,65,.18);right:-70px;top:-70px;z-index:0}
+    .hero-card > *{position:relative;z-index:1}
+    h1{margin:0 0 12px;color:var(--granate-oscuro);font-size:clamp(2rem,4vw,3.6rem);line-height:1.02;letter-spacing:-1px}
+    .lead{font-size:1.06rem;color:var(--gris-700);line-height:1.58;max-width:860px}
+    .signature{margin-top:22px;padding:16px 18px;border-left:5px solid var(--dorado);background:var(--amarillo-suave);border-radius:14px;color:#4f3a12;line-height:1.45}
+    .metric-card{display:grid;padding:24px;gap:15px;align-content:center;background:linear-gradient(180deg,rgba(122,0,38,.05),rgba(255,255,255,.92)),#fff}
+    .metric{padding:18px;border-radius:18px;background:#fff;border:1px solid var(--gris-200)}
+    .metric strong{display:block;font-size:2rem;color:var(--granate);line-height:1}
+    .metric span{display:block;color:var(--gris-700);font-size:.9rem;margin-top:6px;line-height:1.35}
+    .setup{margin-top:24px;display:grid;grid-template-columns:1fr .9fr;gap:24px}
+    .card-header{background:linear-gradient(90deg,var(--granate),var(--granate-claro));color:#fff;padding:18px 24px}
+    .card-header h2{margin:0;font-size:1.22rem}
+    .card-body{padding:24px}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    label{display:block;font-weight:700;color:var(--granate-oscuro);margin-bottom:8px;font-size:.95rem}
+    input,select,textarea{width:100%;padding:13px 14px;border:1px solid #c9d1d9;border-radius:13px;font-family:inherit;font-size:1rem;background:#fff;color:var(--gris-950);outline:none}
+    input:focus,select:focus,textarea:focus{border-color:var(--granate);box-shadow:0 0 0 4px rgba(122,0,38,.12)}
+    .field{margin-bottom:16px}
+    .tiny-note{font-size:.84rem;color:var(--gris-700);line-height:1.45;margin-top:8px}
+    .btn-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+    button,.button-like{border:none;border-radius:999px;padding:13px 18px;font-family:inherit;font-weight:700;cursor:pointer;transition:transform .12s ease, box-shadow .12s ease, background .12s ease;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px}
+    button:hover,.button-like:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(31,41,51,.16)}
+    button:disabled{opacity:.58;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+    .btn-primary{background:var(--granate);color:#fff}
+    .btn-secondary{background:var(--gris-950);color:#fff}
+    .btn-light{background:#fff;color:var(--granate);border:1px solid rgba(122,0,38,.25)}
+    .btn-gold{background:var(--dorado);color:#2f2102}
+    .instructions ul{margin:0;padding-left:20px;line-height:1.65;color:var(--gris-700)}
+    .alert{padding:14px 16px;border-radius:15px;line-height:1.48;margin:0 0 16px;border:1px solid transparent}
+    .alert.warn{background:#fff8e8;border-color:#efd08a;color:#5d3d00}
+    .alert.error{background:#fff0ee;border-color:#f1aaa3;color:#7a170d}
+    .alert.ok{background:#ecfdf3;border-color:#afe3bf;color:#083f25}
+    .activity{display:none;margin-top:24px}
+    .case-card{display:grid;grid-template-columns:.9fr 1.1fr;gap:0}
+    .case-side{background:linear-gradient(160deg,var(--granate-oscuro),var(--granate));color:#fff;padding:28px}
+    .case-side h2{margin:0 0 10px;font-size:1.6rem;line-height:1.15}
+    .case-side p{line-height:1.55;opacity:.95}
+    .case-tag{display:inline-block;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.12);padding:7px 11px;border-radius:999px;font-size:.8rem;margin:4px 4px 0 0}
+    .student-mini{margin-top:18px;padding:14px;border-radius:16px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.24);font-size:.9rem;line-height:1.45}
+    .question-area{padding:28px;background:#fff}
+    .progress-wrap{margin-bottom:22px}
+    .progress-meta{display:flex;justify-content:space-between;gap:12px;color:var(--gris-700);font-size:.92rem;margin-bottom:8px}
+    .progress-bar{height:12px;background:var(--gris-200);border-radius:999px;overflow:hidden}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--granate),var(--dorado));width:0%;transition:width .25s ease}
+    .question h3{margin:0 0 10px;color:var(--granate-oscuro);font-size:1.42rem;line-height:1.25}
+    .question .hint{color:var(--gris-700);line-height:1.5;margin-bottom:18px}
+    .options{display:grid;gap:12px}
+    .option{width:100%;text-align:left;background:#fff;border:2px solid var(--gris-250);color:var(--gris-950);border-radius:16px;padding:15px 16px;font-weight:600;line-height:1.35;display:block}
+    .option:hover{border-color:var(--granate);box-shadow:0 8px 22px rgba(122,0,38,.10)}
+    .option.correct{border-color:var(--verde);background:var(--verde-suave);color:#074d2c}
+    .option.incorrect{border-color:var(--rojo);background:var(--rojo-suave);color:#7a170d}
+    .feedback{display:none;margin-top:18px;padding:17px 18px;border-radius:16px;line-height:1.55;border:1px solid transparent}
+    .feedback.ok{display:block;background:var(--verde-suave);border-color:#b7ebc6;color:#083f25}
+    .feedback.bad{display:block;background:#fff3e0;border-color:#f3c780;color:#5b3a00}
+    .score-pill{display:inline-flex;align-items:center;justify-content:center;min-width:72px;height:36px;border-radius:999px;background:#fff;color:var(--granate);border:1px solid rgba(122,0,38,.2);font-weight:700}
+    .result{display:none;margin-top:24px}
+    .result-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:24px}
+    .result-card{padding:28px}
+    .big-score{width:150px;height:150px;border-radius:50%;background:conic-gradient(var(--granate) var(--score-deg), #e8edf2 0deg);display:grid;place-items:center;margin:4px auto 20px;position:relative}
+    .big-score::after{content:"";position:absolute;width:112px;height:112px;background:#fff;border-radius:50%}
+    .big-score span{position:relative;z-index:2;font-weight:800;color:var(--granate);font-size:1.8rem}
+    .result h2,.result h3{color:var(--granate-oscuro);margin-top:0}
+    .summary-list{display:grid;gap:12px;margin-top:18px}
+    .summary-item{padding:14px 16px;border:1px solid var(--gris-200);border-radius:14px;background:#fff;line-height:1.45}
+    .summary-item strong{color:var(--granate-oscuro)}
+    .print-card{border:2px solid var(--granate);border-radius:18px;overflow:hidden;background:#fff}
+    .print-head{background:linear-gradient(90deg,var(--granate-oscuro),var(--granate));color:#fff;padding:18px 20px}
+    .print-head h3{color:#fff;margin:0 0 6px}
+    .print-body{padding:20px;display:grid;gap:12px;line-height:1.45}
+    .line{height:1px;background:var(--gris-200);margin:4px 0}
+    .save-status{margin-top:16px}
+    .qr-panel{margin-top:24px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center}
+    .qr-box{width:160px;height:160px;display:grid;place-items:center;background:#fff;border:1px solid var(--gris-200);border-radius:18px;overflow:hidden}
+    .qr-box img{width:148px;height:148px}
+    .footer-note{margin-top:24px;color:var(--gris-700);font-size:.88rem;line-height:1.55;text-align:center}
+    .hidden{display:none!important}
+    @media(max-width:900px){
+      .hero,.setup,.case-card,.result-grid,.qr-panel,.grid-2{grid-template-columns:1fr}
+      .topbar-inner{align-items:flex-start;flex-direction:column}
+      .badge{white-space:normal}
+      .hero-card,.card-body,.case-side,.question-area,.result-card{padding:22px}
+    }
+    @media print{
+      body{background:#fff}
+      .topbar,.hero,.setup,.activity .case-side,.progress-wrap,.question,.btn-row,.qr-panel,.footer-note,.summary-list,.save-status{display:none!important}
+      main{padding:0}
+      .activity,.result{display:block!important;margin:0}
+      .panel{box-shadow:none;border:none}
+      .result-grid{display:block}
+      .result-card:first-child{display:none!important}
+      .print-card{border:2px solid #000;border-radius:0}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <img src="https://www.unla.edu.ar/images/logo_web.jpg" alt="Logo UNLa" onerror="this.style.display='none'" />
+        <div>
+          <div class="brand-title">Universidad Nacional de Lanús</div>
+          <div class="brand-subtitle">Licenciatura en Ciencia y Tecnología de los Alimentos</div>
+        </div>
+      </div>
+      <div class="badge">Actividad individual · Valor agregado en alimentos</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="panel hero-card">
+        <h1>Decisiones de un profesional en alimentos</h1>
+        <p class="lead">
+          Una actividad individual para pensar cómo se transforma una materia prima o un producto cotidiano en una solución con valor agregado.
+          Cada estudiante recibe un caso, toma decisiones por multiple choice y obtiene una devolución final.
+        </p>
+        <div class="signature">
+          <strong>Prof. Ing. Juan M. Alderete, PhD</strong><br />
+          Licenciatura en Ciencia y Tecnología de los Alimentos · UNLa
+        </div>
+      </div>
+      <aside class="panel metric-card">
+        <div class="metric"><strong>25</strong><span>casos posibles. Pueden repetirse entre estudiantes.</span></div>
+        <div class="metric"><strong>6</strong><span>decisiones por multiple choice en cada caso.</span></div>
+        <div class="metric"><strong>Sheets</strong><span>los resultados quedan registrados en una hoja de Google.</span></div>
+      </aside>
+    </section>
+
+    <section class="setup">
+      <div class="panel">
+        <div class="card-header"><h2>Identificación del estudiante</h2></div>
+        <div class="card-body">
+          <div id="configAlert" class="alert warn hidden">
+            Falta configurar la URL del Web App de Google Apps Script. La actividad se puede probar, pero los resultados no se guardarán en Google Sheets.
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label for="apellido">Apellido</label>
+              <input id="apellido" autocomplete="family-name" placeholder="Ejemplo: Pérez" />
+            </div>
+            <div class="field">
+              <label for="nombre">Nombre</label>
+              <input id="nombre" autocomplete="given-name" placeholder="Ejemplo: Martina" />
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label for="dni">DNI</label>
+              <input id="dni" inputmode="numeric" autocomplete="off" placeholder="Solo números" />
+            </div>
+            <div class="field">
+              <label for="escuela">Escuela</label>
+              <select id="escuela">
+                <option value="">Seleccionar escuela</option>
+                <option>Técnica 4 de Lanús</option>
+                <option>Longobardi</option>
+                <option>Agro-Técnica San José</option>
+                <option>Técnica 1 de Guernica</option>
+                <option>Técnica 3 de Quilmes</option>
+              </select>
+            </div>
+          </div>
+          <div class="tiny-note">
+            Al iniciar, se asignará un caso al azar. Como la actividad es individual, dos estudiantes pueden recibir el mismo caso sin problema.
+          </div>
+          <div id="formError" class="alert error hidden"></div>
+          <div class="btn-row">
+            <button class="btn-primary" id="startBtn" type="button">Asignar caso e iniciar</button>
+          </div>
+        </div>
+      </div>
+      <div class="panel instructions">
+        <div class="card-header"><h2>Consigna</h2></div>
+        <div class="card-body">
+          <ul>
+            <li>Respondé como si fueras parte de un equipo de desarrollo de alimentos.</li>
+            <li>En cada etapa elegí la opción que mejor resuelve la necesidad del caso.</li>
+            <li>Una buena respuesta combina consumidor, producto, control técnico, inocuidad y comunicación.</li>
+            <li>Al finalizar se guardará tu resultado y se mostrará una tarjeta final.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="activity panel" id="activity">
+      <div class="case-card">
+        <aside class="case-side">
+          <div id="caseNumber" class="case-tag"></div>
+          <h2 id="caseTitle"></h2>
+          <p id="caseContext"></p>
+          <div id="caseTags"></div>
+          <div class="student-mini" id="studentMini"></div>
+        </aside>
+        <div class="question-area">
+          <div class="progress-wrap">
+            <div class="progress-meta">
+              <span id="stepLabel">Pregunta 1 de 6</span>
+              <span class="score-pill" id="scorePill">0 / 0</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+          </div>
+
+          <div class="question" id="questionBox">
+            <h3 id="questionTitle"></h3>
+            <p class="hint" id="questionHint"></p>
+            <div class="options" id="optionsBox"></div>
+            <div id="feedback" class="feedback"></div>
+            <div class="btn-row">
+              <button class="btn-light hidden" id="nextBtn" type="button">Siguiente decisión</button>
+              <button class="btn-gold hidden" id="finishBtn" type="button">Finalizar y guardar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="result" id="result">
+      <div class="result-grid">
+        <div class="panel result-card">
+          <h2>Resultado individual</h2>
+          <div class="big-score" id="bigScore" style="--score-deg:0deg"><span id="scoreText">0%</span></div>
+          <p id="scoreMessage" class="lead"></p>
+          <div id="saveStatus" class="save-status alert warn">Preparando envío a Google Sheets...</div>
+          <div class="btn-row">
+            <button class="btn-primary" type="button" onclick="window.print()">Imprimir tarjeta</button>
+            <button class="btn-light" id="restartBtn" type="button">Hacer otro caso</button>
+          </div>
+        </div>
+        <div class="panel result-card">
+          <div class="print-card" id="printCard">
+            <div class="print-head">
+              <h3 id="printTitle">Tarjeta final</h3>
+              <div id="printSub"></div>
+            </div>
+            <div class="print-body">
+              <div><strong>Estudiante:</strong> <span id="printStudent"></span></div>
+              <div><strong>Escuela:</strong> <span id="printSchool"></span></div>
+              <div><strong>Caso:</strong> <span id="printCase"></span></div>
+              <div><strong>Necesidad detectada:</strong> <span id="printNeed"></span></div>
+              <div><strong>Producto recomendado:</strong> <span id="printProduct"></span></div>
+              <div><strong>Atributo de valor:</strong> <span id="printValue"></span></div>
+              <div><strong>Control crítico:</strong> <span id="printControl"></span></div>
+              <div><strong>Comunicación al consumidor:</strong> <span id="printMessage"></span></div>
+              <div><strong>Rol del profesional en alimentos:</strong> <span id="printRole"></span></div>
+              <div class="line"></div>
+              <div><strong>Puntaje:</strong> <span id="printScore"></span></div>
+            </div>
+          </div>
+          <div class="summary-list" id="summaryList"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel qr-panel">
+      <div class="card-body">
+        <h2 style="margin-top:0;color:var(--granate-oscuro)">Para usar con QR</h2>
+        <p class="lead" style="margin-bottom:0">Cuando esta página esté subida a GitHub Pages, este bloque toma la dirección pública y muestra un QR para compartir la actividad desde una diapositiva o afiche.</p>
+      </div>
+      <div class="qr-box" id="qrBox"></div>
+    </section>
+
+    <p class="footer-note">
+      Actividad didáctica para estudiantes de escuela secundaria · Universidad Nacional de Lanús · Licenciatura en Ciencia y Tecnología de los Alimentos.
+    </p>
+
+    <form id="submitForm" method="POST" target="hiddenFrame" style="display:none">
+      <input type="hidden" id="payloadInput" name="payload" />
+    </form>
+    <iframe id="hiddenFrame" name="hiddenFrame" style="display:none"></iframe>
+  </main>
+
+<script>
+// IMPORTANTE: pegar aquí la URL del Web App de Google Apps Script.
+// Ejemplo: https://script.google.com/macros/s/AKfycbxxxxxxxxxxxxxxxxxxxxxxxxxxxx/exec
+const WEB_APP_URL = "PEGAR_URL_DEL_WEB_APP_AQUI";
+
+const WRONG_PRODUCTS = [
+  "El mismo producto indiferenciado, sin cambios de formulación ni comunicación.",
+  "Un producto más grande, pero sin resolver una necesidad específica.",
+  "Una versión con envase llamativo, pero sin mejora real de calidad, seguridad o utilidad.",
+  "Un producto genérico pensado solo para competir por precio."
+];
+const WRONG_VALUES = [
+  "Bajar el precio como único argumento.",
+  "Agregar colores al envase sin modificar el producto.",
+  "Hacer el producto más complejo, aunque el consumidor no lo necesite.",
+  "Copiar una moda sin identificar una necesidad concreta."
+];
+const WRONG_CONTROLS = [
+  "Controlar solamente el color del envase.",
+  "Priorizar la publicidad y dejar los controles para el final.",
+  "Evaluar solo el sabor, sin inocuidad ni vida útil.",
+  "Asumir que si parece saludable no necesita verificación técnica."
+];
+const WRONG_MESSAGES = [
+  "Prometer beneficios imposibles de comprobar.",
+  "Usar palabras técnicas sin explicar el valor para la persona.",
+  "Comunicar solo precio y promoción.",
+  "No explicar qué problema resuelve el producto."
+];
+const WRONG_MARKETS = ["Commodity indiferenciado", "Especialidad de disponibilidad", "Especialidad de conveniencia", "Especialidad funcional", "Especialidad de relación"];
+const WRONG_ROLES = [
+  "Elegir el diseño de marca sin revisar formulación ni proceso.",
+  "Pensar solo en vender, sin verificar inocuidad, calidad y legislación.",
+  "Repetir un producto existente sin analizar consumidores ni riesgos.",
+  "Dejar la decisión técnica en manos del envase y la publicidad."
+];
+
+const cases = [
+  {
+    title:"Adulto mayor que vive solo",
+    context:"Una persona mayor quiere comer bien, pero vive sola, cocina poco y necesita porciones chicas, fáciles de abrir y de masticar.",
+    tags:["Adultos mayores","Porciones chicas","Textura"],
+    need:"Alimentación práctica, segura, nutritiva y adaptada a una menor fuerza de mordida.",
+    product:"Comida lista refrigerada, porción individual, textura tierna, buena densidad nutricional y envase de fácil apertura.",
+    value:"Adaptación de textura, porción y facilidad de uso.",
+    control:"Control de vida útil, inocuidad, textura final y aporte nutricional por porción.",
+    message:"Porción individual, fácil de abrir, textura suave y aporte nutricional claro.",
+    market:"Especialidad funcional",
+    role:"Definir formulación, proceso térmico, vida útil, rotulado y criterios de textura segura."
+  },
+  {
+    title:"Estudiante que almuerza fuera de casa",
+    context:"Una estudiante pasa muchas horas fuera de su casa. Compra rápido, tiene poco presupuesto y quiere algo rico que no la deje con hambre a los 20 minutos.",
+    tags:["Conveniencia","Estudiantes","Saciedad"],
+    need:"Almuerzo práctico, accesible, transportable y con buena saciedad.",
+    product:"Wrap o bowl refrigerado con cereales, legumbres, vegetales y salsa separada.",
+    value:"Conveniencia con mejor equilibrio nutricional y saciedad.",
+    control:"Control de cadena de frío, vida útil, actividad de agua en componentes y seguridad microbiológica.",
+    message:"Almuerzo completo, transportable y listo para comer.",
+    market:"Especialidad de conveniencia",
+    role:"Diseñar un producto estable, seguro, sensorialmente atractivo y viable para venta rápida."
+  },
+  {
+    title:"Persona celíaca",
+    context:"Una persona celíaca quiere comprar una merienda sin miedo. No alcanza con decir 'sin gluten': necesita confianza real.",
+    tags:["Sin TACC","Confianza","Inocuidad"],
+    need:"Producto libre de gluten con control de contaminación cruzada y comunicación confiable.",
+    product:"Muffin o barrita sin TACC elaborado en línea controlada, con rotulado claro y trazabilidad de materias primas.",
+    value:"Seguridad, certificación y confianza.",
+    control:"Control de gluten, segregación de materias primas, limpieza validada y rotulado correcto.",
+    message:"Sin TACC, elaborado con control de contaminación cruzada y trazabilidad.",
+    market:"Especialidad de relación",
+    role:"Garantizar proceso, proveedores, análisis, trazabilidad y cumplimiento normativo."
+  },
+  {
+    title:"Deportista amateur",
+    context:"Un joven entrena varias veces por semana. Busca algo práctico para después de entrenar, pero no quiere un producto con promesas exageradas.",
+    tags:["Deporte","Proteínas","Recuperación"],
+    need:"Colación práctica con aporte proteico y energético razonable.",
+    product:"Bebida láctea o snack proteico con composición declarada, porción clara y buen perfil sensorial.",
+    value:"Funcionalidad nutricional verificable y practicidad post-entrenamiento.",
+    control:"Control de composición, porción, estabilidad, vida útil y coherencia del rotulado.",
+    message:"Aporte proteico por porción, energía y practicidad después del entrenamiento.",
+    market:"Especialidad funcional",
+    role:"Traducir una necesidad nutricional en un producto medible, seguro y correctamente comunicado."
+  },
+  {
+    title:"Kiosco escolar",
+    context:"Una escuela quiere ofrecer algo más interesante que golosinas comunes, pero los estudiantes igual esperan sabor, precio razonable y rapidez.",
+    tags:["Escuela","Snack","Reformulación"],
+    need:"Snack atractivo, accesible y con mejor perfil nutricional para recreos.",
+    product:"Snack horneado de cereal y fruta, porción controlada, buen sabor y rotulado simple.",
+    value:"Reformulación con mejor perfil y aceptación sensorial.",
+    control:"Control de porción, azúcares, grasas, sodio, alérgenos, vida útil e inocuidad.",
+    message:"Rico, práctico y con porción pensada para el recreo.",
+    market:"Especialidad de conveniencia",
+    role:"Equilibrar aceptabilidad, composición, legislación y factibilidad productiva."
+  },
+  {
+    title:"Comedor comunitario",
+    context:"Un comedor necesita preparar muchas raciones con bajo presupuesto. El desafío no es lujo: es nutrición, seguridad y rendimiento.",
+    tags:["Raciones","Costo","Seguridad"],
+    need:"Alimento rendidor, seguro, nutritivo y fácil de preparar a escala.",
+    product:"Premezcla fortificada para guisos o sopas con legumbres, cereales y vegetales deshidratados.",
+    value:"Alto rendimiento, facilidad operativa y aporte nutricional.",
+    control:"Control de formulación, fortificación, humedad, vida útil, dosificación e inocuidad.",
+    message:"Rinde más, se prepara fácil y mejora el aporte nutricional de las raciones.",
+    market:"Especialidad funcional",
+    role:"Diseñar una solución técnicamente segura y económicamente viable para muchas raciones."
+  },
+  {
+    title:"Familia con poco tiempo",
+    context:"Una familia llega tarde a casa y quiere cenar rápido. No busca cocina gourmet: busca resolver la cena sin caer siempre en comida ultrarrápida.",
+    tags:["Familia","Cena rápida","Listo para cocinar"],
+    need:"Cena rápida, rica, segura y con mínima preparación.",
+    product:"Kit refrigerado listo para cocinar con proteína, vegetales lavados y salsa dosificada.",
+    value:"Ahorro de tiempo con ingredientes controlados y experiencia de preparación simple.",
+    control:"Control de cadena de frío, lavado de vegetales, vida útil, porcionado y compatibilidad de ingredientes.",
+    message:"Cena lista para cocinar en pocos minutos, con ingredientes medidos.",
+    market:"Especialidad de conveniencia",
+    role:"Integrar proceso, logística, vida útil y experiencia de uso en el hogar."
+  },
+  {
+    title:"Intolerancia a la lactosa",
+    context:"Una persona disfruta los lácteos, pero la leche común le cae mal. Quiere seguir consumiendo productos familiares sin molestias.",
+    tags:["Lácteos","Lactosa","Funcional"],
+    need:"Producto lácteo de consumo cotidiano, pero adaptado a intolerancia a la lactosa.",
+    product:"Yogur o leche reducida en lactosa, con buena textura y sabor similar al producto tradicional.",
+    value:"Adaptación funcional sin perder experiencia sensorial.",
+    control:"Control de hidrólisis de lactosa, composición, estabilidad, vida útil y rotulado.",
+    message:"Todo el sabor del lácteo, con lactosa reducida y composición controlada.",
+    market:"Especialidad funcional",
+    role:"Ajustar proceso enzimático, calidad sensorial, control analítico y comunicación responsable."
+  },
+  {
+    title:"Panadería barrial",
+    context:"Una panadería quiere diferenciarse de otras sin dejar de vender productos cotidianos. Necesita algo que sea reconocible y novedoso a la vez.",
+    tags:["Panadería","Diferenciación","Identidad"],
+    need:"Producto panificado diferenciado, viable en pequeña escala y con identidad local.",
+    product:"Panificado con harina regional, fermentación controlada y perfil sensorial distintivo.",
+    value:"Identidad, proceso y calidad sensorial.",
+    control:"Control de fermentación, humedad, textura, vida útil, materias primas y repetibilidad.",
+    message:"Producto de elaboración local con ingredientes seleccionados y proceso cuidado.",
+    market:"Especialidad funcional",
+    role:"Transformar una receta en un producto reproducible, seguro y con atributos medibles."
+  },
+  {
+    title:"Hospital o geriátrico",
+    context:"Una institución necesita alimentos seguros para personas con necesidades específicas. Acá el error no es solo comercial: puede afectar la salud.",
+    tags:["Institucional","Textura","Seguridad"],
+    need:"Alimentos con textura adaptada, seguridad microbiológica y composición controlada.",
+    product:"Puré o plato texturizado en porciones individuales, pasteurizado y con composición nutricional definida.",
+    value:"Seguridad, estandarización y adaptación a necesidades institucionales.",
+    control:"Control microbiológico, textura, temperatura de servicio, alérgenos y rotulado interno.",
+    message:"Porciones seguras, estandarizadas y adaptadas a necesidades de alimentación institucional.",
+    market:"Especialidad de relación",
+    role:"Definir especificaciones técnicas y sistemas de control confiables para compradores institucionales."
+  },
+  {
+    title:"Producto regional con identidad",
+    context:"Una cooperativa quiere vender un dulce regional. El producto es bueno, pero se pierde entre opciones parecidas en la góndola.",
+    tags:["Territorio","Identidad","Trazabilidad"],
+    need:"Diferenciar un producto regional mediante origen, historia, calidad y confianza.",
+    product:"Dulce regional con materia prima trazable, receta estandarizada, relato territorial y envase cuidado.",
+    value:"Identidad territorial, trazabilidad y calidad sensorial consistente.",
+    control:"Control de sólidos solubles, pH, tratamiento térmico, envase, vida útil y loteado.",
+    message:"Origen, historia y calidad controlada en cada lote.",
+    market:"Especialidad de relación",
+    role:"Convertir saberes locales en un producto seguro, estandarizado y comunicable."
+  },
+  {
+    title:"Fruta para exportación",
+    context:"Una empresa tiene fruta de buena calidad, pero vender fruta fresca sin diferenciar la deja expuesta al precio internacional.",
+    tags:["Exportación","Fruta","Valor agregado"],
+    need:"Aumentar valor, estabilidad y diferenciación a partir de una materia prima frutícola.",
+    product:"Snack de fruta deshidratada o puré concentrado con especificaciones técnicas para mercados externos.",
+    value:"Vida útil, estandarización y uso como ingrediente o snack diferenciado.",
+    control:"Control de humedad, actividad de agua, color, oxidación, contaminantes y especificaciones de exportación.",
+    message:"Fruta argentina con calidad estable, trazable y lista para nuevos usos.",
+    market:"Especialidad funcional",
+    role:"Diseñar proceso, especificaciones, controles y documentación técnica para comercialización."
+  },
+  {
+    title:"Delivery saludable",
+    context:"Un emprendimiento de delivery quiere vender comida saludable, pero necesita que llegue bien, segura y con buena apariencia.",
+    tags:["Delivery","Logística","Calidad"],
+    need:"Comida lista para entregar, con buena calidad sensorial durante transporte y seguridad alimentaria.",
+    product:"Menú diseñado para delivery, con componentes separados, envase adecuado y control de temperatura.",
+    value:"Calidad sostenida entre elaboración, traslado y consumo.",
+    control:"Control de temperatura, tiempos de exposición, envase, migración, alérgenos y vida útil corta.",
+    message:"Comida rica y equilibrada, pensada para llegar bien.",
+    market:"Especialidad de conveniencia",
+    role:"Diseñar producto, envase y proceso considerando la experiencia real de entrega."
+  },
+  {
+    title:"PyME láctea",
+    context:"Una pequeña empresa vende leche y yogur comunes. Quiere evitar competir solo por precio contra marcas grandes.",
+    tags:["PyME","Lácteos","Diferenciación"],
+    need:"Diferenciar productos lácteos con atributos valorados y factibles para pequeña escala.",
+    product:"Yogur con identidad local, fermentos seleccionados, textura cuidada y fruta regional.",
+    value:"Calidad sensorial, identidad local y formulación diferenciada.",
+    control:"Control de fermentación, pH, viscosidad, fruta incorporada, cadena de frío y vida útil.",
+    message:"Yogur local con fermentación cuidada, fruta real y calidad controlada.",
+    market:"Especialidad funcional",
+    role:"Elegir atributos diferenciadores que la PyME pueda producir y controlar consistentemente."
+  },
+  {
+    title:"Frutas maduras que se desperdician",
+    context:"Un mercado descarta fruta madura que todavía es apta, pero ya no se vende como fresca. El problema es económico y ambiental.",
+    tags:["Desperdicio","Sustentabilidad","Proceso"],
+    need:"Aprovechar fruta apta para consumo antes de que se pierda valor.",
+    product:"Pulpa pasteurizada, mermelada reducida o snack deshidratado elaborado con fruta madura seleccionada.",
+    value:"Reducción de desperdicio mediante transformación segura y valorización de subproductos.",
+    control:"Control de selección, madurez, carga microbiana, pH, tratamiento térmico y vida útil.",
+    message:"Producto elaborado con fruta rescatada y controlada, reduciendo desperdicio.",
+    market:"Especialidad funcional",
+    role:"Separar descarte de materia prima utilizable y definir un proceso seguro de valorización."
+  },
+  {
+    title:"Personas que buscan reducir sodio",
+    context:"Hay consumidores que necesitan o prefieren reducir sodio, pero rechazan productos que pierden sabor.",
+    tags:["Sodio","Reformulación","Sabor"],
+    need:"Producto con menor sodio, aceptable sensorialmente y correctamente rotulado.",
+    product:"Sopa, panificado o snack reformulado con reducción gradual de sodio y potenciadores de sabor permitidos.",
+    value:"Mejor perfil nutricional sin pérdida fuerte de aceptabilidad.",
+    control:"Control de sodio, actividad de agua, sabor, textura, conservación y declaración en rótulo.",
+    message:"Menos sodio, sabor cuidado y composición controlada.",
+    market:"Especialidad funcional",
+    role:"Reformular sin comprometer seguridad, conservación, aceptación ni cumplimiento legal."
+  },
+  {
+    title:"Consumidor vegano o flexitariano",
+    context:"Una persona quiere reducir alimentos de origen animal, pero no quiere resignar textura, sabor ni practicidad.",
+    tags:["Plant-based","Textura","Proteínas"],
+    need:"Alternativa vegetal práctica, con buena textura y aporte nutricional razonable.",
+    product:"Hamburguesa vegetal con legumbres y cereales, textura trabajada y perfil nutricional declarado.",
+    value:"Sustitución funcional y sensorial de una comida conocida.",
+    control:"Control de proteínas, textura, humedad, vida útil, alérgenos y cocción segura.",
+    message:"Alternativa vegetal rica, práctica y con ingredientes claros.",
+    market:"Especialidad funcional",
+    role:"Diseñar estructura, sabor, conservación y rotulado sin prometer más de lo verificable."
+  },
+  {
+    title:"Salida escolar o excursión",
+    context:"Un grupo sale todo el día. Necesita alimentos que no dependan tanto de refrigeración, no ensucien y sean fáciles de repartir.",
+    tags:["Excursión","Vida útil","Portabilidad"],
+    need:"Colación transportable, segura, porcionada y resistente al manejo.",
+    product:"Barrita horneada o mix porcionado con baja humedad, envase individual y buena estabilidad.",
+    value:"Portabilidad, estabilidad y facilidad de distribución.",
+    control:"Control de humedad, actividad de agua, alérgenos, resistencia del envase y vida útil.",
+    message:"Colación práctica para llevar, repartir y consumir durante la salida.",
+    market:"Especialidad de conveniencia",
+    role:"Resolver una condición de uso concreta mediante formulación, envase y vida útil."
+  },
+  {
+    title:"Personas que controlan azúcares",
+    context:"Un consumidor busca reducir azúcares agregados. No quiere mensajes mágicos: quiere información clara y un producto rico.",
+    tags:["Azúcares","Rotulado","Reformulación"],
+    need:"Producto con menor azúcar agregada y comunicación responsable.",
+    product:"Yogur, bebida o postre reformulado con menor azúcar, dulzor equilibrado y declaración clara por porción.",
+    value:"Reducción de azúcar con aceptabilidad sensorial y transparencia.",
+    control:"Control de azúcares, edulcorantes permitidos, porción, estabilidad y rotulado.",
+    message:"Menos azúcar agregada, sabor equilibrado e información clara por porción.",
+    market:"Especialidad funcional",
+    role:"Reformular y comunicar sin hacer promesas de salud no demostradas."
+  },
+  {
+    title:"Bebida para días de calor",
+    context:"En verano aumenta la demanda de bebidas. El desafío es diferenciarse sin caer en exceso de azúcar ni promesas poco serias.",
+    tags:["Bebidas","Verano","Hidratación"],
+    need:"Bebida refrescante, segura, estable y con perfil más cuidado.",
+    product:"Bebida saborizada con fruta, menor azúcar, acidez controlada y tratamiento de conservación adecuado.",
+    value:"Refrescancia, perfil sensorial y composición más equilibrada.",
+    control:"Control de pH, °Brix, tratamiento térmico o conservación, envase, gas si corresponde y vida útil.",
+    message:"Refrescante, con fruta y composición clara.",
+    market:"Especialidad funcional",
+    role:"Definir formulación, conservación, estabilidad y rotulado de una bebida segura."
+  },
+  {
+    title:"Pequeño productor de miel",
+    context:"Un productor vende miel a granel. Quiere captar más valor sin perder la identidad artesanal ni incumplir controles.",
+    tags:["Miel","Origen","Diferenciación"],
+    need:"Transformar un producto primario en una especialidad con identidad y calidad controlada.",
+    product:"Miel fraccionada por origen floral o territorial, con loteado, análisis básico y envase cuidado.",
+    value:"Origen, trazabilidad, perfil sensorial y confianza.",
+    control:"Control de humedad, HMF, limpieza, fraccionamiento, loteado, cristalización y rotulado.",
+    message:"Miel de origen identificado, fraccionada con control de calidad.",
+    market:"Especialidad de relación",
+    role:"Ordenar especificaciones, proceso de fraccionamiento, control y comunicación de origen."
+  },
+  {
+    title:"Industria pesquera",
+    context:"Una empresa vende pescado congelado. Quiere pasar de vender solo materia prima a ofrecer soluciones más listas para usar.",
+    tags:["Pescado","Listo para cocinar","Cadena de frío"],
+    need:"Producto pesquero práctico, seguro y con mayor valor por preparación.",
+    product:"Porción de pescado lista para horno, condimentada, envasada y congelada individualmente.",
+    value:"Conveniencia, porcionado, seguridad y reducción de trabajo en el hogar.",
+    control:"Control de cadena de frío, parásitos si corresponde, oxidación, glaseado, envase y vida útil congelada.",
+    message:"Pescado listo para cocinar, porcionado y con cadena de frío controlada.",
+    market:"Especialidad de conveniencia",
+    role:"Convertir materia prima perecedera en solución segura, práctica y estandarizada."
+  },
+  {
+    title:"Envase más sostenible",
+    context:"Una marca quiere reducir plástico. Pero el envase también protege el alimento: no puede cambiarse sin analizar vida útil y seguridad.",
+    tags:["Envase","Sustentabilidad","Vida útil"],
+    need:"Reducir impacto del envase sin deteriorar seguridad ni vida útil.",
+    product:"Producto con envase rediseñado, menor material, barrera adecuada y evaluación de conservación.",
+    value:"Sustentabilidad compatible con protección real del alimento.",
+    control:"Control de barrera, migración, resistencia mecánica, vida útil, reciclabilidad y compatibilidad producto-envase.",
+    message:"Menos material, misma protección y calidad controlada.",
+    market:"Especialidad funcional",
+    role:"Evaluar técnicamente el envase como parte del sistema alimento-proceso-distribución."
+  },
+  {
+    title:"Snack de larga vida",
+    context:"Un comercio necesita un snack que no dependa de heladera, tenga buena rotación y no se deteriore rápido.",
+    tags:["Snack","Larga vida","Góndola"],
+    need:"Producto estable a temperatura ambiente, atractivo y seguro.",
+    product:"Snack crocante horneado o deshidratado, con baja actividad de agua y envase barrera.",
+    value:"Vida útil, textura crocante y practicidad de venta.",
+    control:"Control de actividad de agua, rancidez, textura, envase barrera, alérgenos y vida útil.",
+    message:"Snack crocante, práctico y estable para llevar.",
+    market:"Especialidad de conveniencia",
+    role:"Diseñar formulación, proceso y envase para conservar textura y seguridad."
+  },
+  {
+    title:"Trabajadores nocturnos",
+    context:"Personas que trabajan de noche necesitan comer en horarios poco habituales. Buscan algo práctico, no pesado y disponible fuera del horario común.",
+    tags:["Turno noche","Practicidad","Disponibilidad"],
+    need:"Alimento disponible, fácil de consumir y adecuado para horarios nocturnos.",
+    product:"Vianda liviana refrigerada o snack salado nutritivo para máquinas expendedoras y estaciones de servicio.",
+    value:"Disponibilidad en horarios críticos y practicidad de consumo.",
+    control:"Control de vida útil, cadena de frío o estabilidad, porción, rotulado y seguridad del punto de venta.",
+    message:"Comida práctica y disponible para quienes trabajan cuando otros duermen.",
+    market:"Especialidad de disponibilidad",
+    role:"Diseñar un producto que resuelva disponibilidad, conservación y consumo fuera del horario habitual."
+  }
+];
+
+
+
+let selectedCase = null;
+let selectedCaseIndex = null;
+let questions = [];
+let current = 0;
+let score = 0;
+let answers = [];
+let student = null;
+let pendingSubmit = false;
+const maxPerQuestion = 10;
+const $ = id => document.getElementById(id);
+
+function shuffle(array){
+  const a = [...array];
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function uniqueWrong(list, correct, n=3){ return shuffle(list.filter(x => x !== correct)).slice(0,n); }
+function cleanText(value){ return String(value || '').trim().replace(/\s+/g,' '); }
+function configured(){ return WEB_APP_URL && !WEB_APP_URL.includes('PEGAR_URL'); }
+
+function buildQuestions(c){
+  const marketWrong = WRONG_MARKETS.filter(x => x !== c.market);
+  return [
+    {title:"Primera decisión: ¿qué producto tiene más sentido?", hint:"Pensá qué solución responde mejor al caso. No alcanza con cambiar el envase: el producto tiene que resolver una necesidad.", correct:c.product, options:[c.product, ...uniqueWrong(WRONG_PRODUCTS, c.product, 3)], ok:"Bien. La propuesta conecta producto, usuario y situación de consumo.", bad:"La opción elegida puede venderse, pero no resuelve tan bien la necesidad del caso."},
+    {title:"Segunda decisión: ¿dónde está el valor agregado?", hint:"El valor no siempre está en procesar más. Puede estar en función, confianza, identidad, disponibilidad, practicidad o seguridad.", correct:c.value, options:[c.value, ...uniqueWrong(WRONG_VALUES, c.value, 3)], ok:"Correcto. El atributo elegido es el que más explica por qué alguien pagaría o elegiría este producto.", bad:"Esa respuesta no construye una diferenciación fuerte. El valor agregado debe ser percibido por un usuario real."},
+    {title:"Tercera decisión: ¿qué control técnico es crítico?", hint:"Un profesional en alimentos no solo piensa ideas. También define cómo se hace el producto de manera segura y repetible.", correct:c.control, options:[c.control, ...uniqueWrong(WRONG_CONTROLS, c.control, 3)], ok:"Muy bien. Ese control conecta calidad, inocuidad y factibilidad del producto.", bad:"Cuidado: una buena idea sin controles adecuados puede fallar en inocuidad, calidad o vida útil."},
+    {title:"Cuarta decisión: ¿cómo lo comunicarías?", hint:"La comunicación debe ser clara, responsable y conectada con la necesidad del consumidor.", correct:c.message, options:[c.message, ...uniqueWrong(WRONG_MESSAGES, c.message, 3)], ok:"Correcto. La comunicación explica el valor sin prometer de más.", bad:"Esa forma de comunicar puede sonar atractiva, pero no explica con claridad el valor real del producto."},
+    {title:"Quinta decisión: ¿qué tipo de mercado predomina?", hint:"Relacioná el caso con el tipo de especialidad. A veces el valor está en función; otras, en confianza, urgencia o facilidad de compra.", correct:c.market, options:[c.market, ...shuffle(marketWrong).slice(0,3)], ok:"Bien clasificado. Esa categoría ayuda a entender cómo compite el producto.", bad:"La categoría elegida no es la más representativa del caso. Revisá qué necesidad comanda la compra."},
+    {title:"Sexta decisión: ¿qué debería hacer el profesional en alimentos?", hint:"Elegí la intervención profesional más completa. La carrera combina producto, proceso, calidad, inocuidad, legislación y mercado.", correct:c.role, options:[c.role, ...uniqueWrong(WRONG_ROLES, c.role, 3)], ok:"Excelente. Ese rol integra ciencia, tecnología, control y decisión de mercado.", bad:"Esa intervención es parcial. El profesional en alimentos debe mirar el sistema completo."}
+  ].map(q => ({...q, options:shuffle(q.options)}));
+}
+
+function validateStudent(){
+  const apellido = cleanText($('apellido').value);
+  const nombre = cleanText($('nombre').value);
+  const dni = cleanText($('dni').value).replace(/[^0-9]/g,'');
+  const escuela = cleanText($('escuela').value);
+  const errors = [];
+  if(!apellido) errors.push('Ingresá el apellido.');
+  if(!nombre) errors.push('Ingresá el nombre.');
+  if(!dni || dni.length < 6) errors.push('Ingresá un DNI válido, solo con números.');
+  if(!escuela) errors.push('Seleccioná la escuela.');
+  $('dni').value = dni;
+  if(errors.length){
+    $('formError').innerHTML = errors.join('<br>');
+    $('formError').classList.remove('hidden');
+    return null;
+  }
+  $('formError').classList.add('hidden');
+  return {apellido,nombre,dni,escuela};
+}
+
+function startActivity(){
+  student = validateStudent();
+  if(!student) return;
+  selectedCaseIndex = Math.floor(Math.random()*cases.length);
+  selectedCase = cases[selectedCaseIndex];
+  questions = buildQuestions(selectedCase);
+  current = 0;
+  score = 0;
+  answers = [];
+  $('activity').style.display='block';
+  $('result').style.display='none';
+  $('caseNumber').textContent = `Caso ${String(selectedCaseIndex+1).padStart(2,'0')}`;
+  $('caseTitle').textContent = selectedCase.title;
+  $('caseContext').textContent = selectedCase.context;
+  $('caseTags').innerHTML = selectedCase.tags.map(t => `<span class="case-tag">${t}</span>`).join('');
+  $('studentMini').innerHTML = `<strong>${student.apellido}, ${student.nombre}</strong><br>DNI ${student.dni}<br>${student.escuela}`;
+  renderQuestion();
+  $('activity').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function renderQuestion(){
+  const q = questions[current];
+  $('stepLabel').textContent = `Pregunta ${current+1} de ${questions.length}`;
+  $('scorePill').textContent = `${score} / ${current*maxPerQuestion}`;
+  $('progressFill').style.width = `${(current/questions.length)*100}%`;
+  $('questionTitle').textContent = q.title;
+  $('questionHint').textContent = q.hint;
+  $('feedback').className = 'feedback';
+  $('feedback').style.display = 'none';
+  $('nextBtn').classList.add('hidden');
+  $('finishBtn').classList.add('hidden');
+  const box = $('optionsBox');
+  box.innerHTML = '';
+  q.options.forEach(opt=>{
+    const btn = document.createElement('button');
+    btn.className='option';
+    btn.type='button';
+    btn.textContent=opt;
+    btn.addEventListener('click',()=>selectOption(btn,opt));
+    box.appendChild(btn);
+  });
+}
+
+function selectOption(btn,opt){
+  const q = questions[current];
+  const optionButtons = [...document.querySelectorAll('.option')];
+  optionButtons.forEach(b=>{
+    b.disabled = true;
+    if(b.textContent === q.correct) b.classList.add('correct');
+  });
+  const isCorrect = opt === q.correct;
+  if(isCorrect){
+    score += maxPerQuestion;
+    btn.classList.add('correct');
+  } else {
+    btn.classList.add('incorrect');
+  }
+  answers.push({question:q.title, chosen:opt, correct:q.correct, isCorrect});
+  $('feedback').className = `feedback ${isCorrect ? 'ok':'bad'}`;
+  $('feedback').style.display = 'block';
+  $('feedback').innerHTML = `<strong>${isCorrect ? 'Buena decisión.' : 'Para revisar.'}</strong> ${isCorrect ? q.ok : q.bad}<br><strong>Recomendación técnica:</strong> ${q.correct}`;
+  $('scorePill').textContent = `${score} / ${(current+1)*maxPerQuestion}`;
+  if(current < questions.length - 1) $('nextBtn').classList.remove('hidden');
+  else $('finishBtn').classList.remove('hidden');
+}
+
+function nextQuestion(){ current++; renderQuestion(); }
+
+function finish(){
+  $('progressFill').style.width = '100%';
+  $('activity').style.display='none';
+  $('result').style.display='block';
+  const total = questions.length * maxPerQuestion;
+  const pct = Math.round(score/total*100);
+  $('bigScore').style.setProperty('--score-deg', `${pct*3.6}deg`);
+  $('scoreText').textContent = `${pct}%`;
+  let msg = '';
+  if(pct >= 85) msg = 'Muy buen recorrido. Lograste conectar necesidad, producto, control técnico y comunicación.';
+  else if(pct >= 60) msg = 'Buen recorrido general. Hay decisiones fuertes, aunque algunas podrían afinarse desde calidad, inocuidad o mercado.';
+  else msg = 'El caso todavía necesita más análisis. Revisá qué necesidad concreta debe resolver el producto y qué controles lo hacen confiable.';
+  $('scoreMessage').textContent = msg;
+  $('printTitle').textContent = `${student.apellido}, ${student.nombre} · ${selectedCase.title}`;
+  $('printSub').textContent = 'UNLa · Licenciatura en Ciencia y Tecnología de los Alimentos';
+  $('printStudent').textContent = `${student.apellido}, ${student.nombre} · DNI ${student.dni}`;
+  $('printSchool').textContent = student.escuela;
+  $('printCase').textContent = `Caso ${String(selectedCaseIndex+1).padStart(2,'0')} · ${selectedCase.title}`;
+  $('printNeed').textContent = selectedCase.need;
+  $('printProduct').textContent = selectedCase.product;
+  $('printValue').textContent = selectedCase.value;
+  $('printControl').textContent = selectedCase.control;
+  $('printMessage').textContent = selectedCase.message;
+  $('printRole').textContent = selectedCase.role;
+  $('printScore').textContent = `${score} / ${total} puntos (${pct}%)`;
+  $('summaryList').innerHTML = answers.map((a,i)=>`
+    <div class="summary-item">
+      <strong>${i+1}. ${a.isCorrect ? 'Correcta' : 'Revisar'}</strong><br>
+      Elección: ${a.chosen}<br>
+      Recomendación: ${a.correct}
+    </div>
+  `).join('');
+  submitResult(total,pct,msg);
+  $('result').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function buildPayload(total,pct,msg){
+  const payload = {
+    timestampCliente: new Date().toISOString(),
+    apellido: student.apellido,
+    nombre: student.nombre,
+    dni: student.dni,
+    escuela: student.escuela,
+    casoNumero: selectedCaseIndex + 1,
+    casoTitulo: selectedCase.title,
+    necesidad: selectedCase.need,
+    puntaje: score,
+    total: total,
+    porcentaje: pct,
+    mensajeResultado: msg,
+    respuestas: answers.map((a,i)=>({
+      numero: i+1,
+      pregunta: a.question,
+      eleccion: a.chosen,
+      recomendacion: a.correct,
+      correcta: a.isCorrect
+    })),
+    userAgent: navigator.userAgent,
+    pagina: window.location.href
+  };
+  return payload;
+}
+
+function submitResult(total,pct,msg){
+  if(!configured()){
+    $('saveStatus').className = 'save-status alert warn';
+    $('saveStatus').innerHTML = 'Resultado generado, pero no enviado: falta pegar la URL del Web App de Apps Script en el HTML.';
+    return;
+  }
+  const payload = buildPayload(total,pct,msg);
+  $('saveStatus').className = 'save-status alert warn';
+  $('saveStatus').innerHTML = 'Enviando resultado a Google Sheets...';
+  const form = $('submitForm');
+  form.action = WEB_APP_URL;
+  $('payloadInput').value = JSON.stringify(payload);
+  pendingSubmit = true;
+  form.submit();
+}
+
+function makeQR(){
+  const url = window.location.href;
+  const box = $('qrBox');
+  const img = document.createElement('img');
+  img.alt = 'QR de la actividad';
+  img.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(url)}`;
+  box.innerHTML='';
+  box.appendChild(img);
+}
+
+$('startBtn').addEventListener('click',startActivity);
+$('nextBtn').addEventListener('click',nextQuestion);
+$('finishBtn').addEventListener('click',finish);
+$('restartBtn').addEventListener('click',()=>{
+  $('result').style.display='none';
+  $('activity').style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+$('hiddenFrame').addEventListener('load',()=>{
+  if(!pendingSubmit) return;
+  pendingSubmit = false;
+  $('saveStatus').className = 'save-status alert ok';
+  $('saveStatus').innerHTML = 'Resultado enviado a Google Sheets.';
+});
+
+if(!configured()) $('configAlert').classList.remove('hidden');
+makeQR();
+</script>
+</body>
+</html>
